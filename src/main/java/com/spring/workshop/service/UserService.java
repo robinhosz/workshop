@@ -4,6 +4,7 @@ import com.spring.workshop.domain.User;
 import com.spring.workshop.dto.UserDTO;
 import com.spring.workshop.repository.UserRepository;
 import com.spring.workshop.service.exception.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    @Autowired
+    private ModelMapper mapper;
     @Autowired
     private UserRepository repository;
 
@@ -34,7 +37,14 @@ public class UserService {
         repository.deleteById(id);
     }
 
+    public User update(UserDTO obj) {
+        repository.findById(obj.getId());
+        return repository.save(mapper.map(obj, User.class));
+    }
+
     public User fromDTO(UserDTO objDto) {
         return new User(objDto.getId(), objDto.getName(), objDto.getEmail());
     }
+
+
 }
