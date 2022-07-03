@@ -1,12 +1,14 @@
 package com.spring.workshop.service;
 
 import com.spring.workshop.domain.User;
+import com.spring.workshop.dto.UserDTO;
 import com.spring.workshop.repository.UserRepository;
 import com.spring.workshop.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,10 +21,15 @@ public class UserService {
     }
 
     public User findById(String id) {
-        User user = repository.findById(id).orElse(null);
-        if(user == null) {
-            throw new ObjectNotFoundException("Objeto não encontrado");
-        }
-        return user;
+        Optional<User> user = repository.findById(id);
+        return user.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+    }
+
+    public User insert(User obj) {
+        return repository.insert(obj);
+    }
+
+    public User fromDTO(UserDTO objDto) {
+        return new User(objDto.getId(), objDto.getName(), objDto.getEmail());
     }
 }
