@@ -1,8 +1,10 @@
 package com.spring.workshop.resources;
 
+import com.spring.workshop.domain.Post;
 import com.spring.workshop.domain.User;
 import com.spring.workshop.dto.UserDTO;
 import com.spring.workshop.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/users")
 public class UserResource {
 
+    @Autowired
+    private ModelMapper mapper;
     @Autowired
     private UserService service;
     @GetMapping
@@ -44,4 +48,16 @@ public class UserResource {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO obj, @PathVariable String id) {
+        obj.setId(id);
+        return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
+    }
+
 }
