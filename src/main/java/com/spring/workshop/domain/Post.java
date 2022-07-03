@@ -1,5 +1,6 @@
 package com.spring.workshop.domain;
 
+import com.spring.workshop.dto.AuthorDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,5 @@ public class Post implements Serializable {
     private Date date;
     private String title;
     private String body;
-    private User author;
+    private AuthorDTO author;
 }
