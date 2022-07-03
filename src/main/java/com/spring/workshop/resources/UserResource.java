@@ -1,5 +1,6 @@
 package com.spring.workshop.resources;
 
+import com.spring.workshop.domain.Post;
 import com.spring.workshop.domain.User;
 import com.spring.workshop.dto.UserDTO;
 import com.spring.workshop.service.UserService;
@@ -51,6 +52,12 @@ public class UserResource {
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO obj, @PathVariable String id) {
         obj.setId(id);
         return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
     }
 
 }
